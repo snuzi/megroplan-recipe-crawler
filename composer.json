@@ -1,0 +1,7 @@
+{
+    "require": {
+        "teamtnt/tntsearch": "^2.3",
+        "fabpot/goutte": "^4.0",
+        "phpunit/phpunit": "^9.1"
+    }
+}
