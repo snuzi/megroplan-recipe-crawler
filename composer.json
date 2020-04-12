@@ -1,7 +1,12 @@
 {
     "require": {
         "teamtnt/tntsearch": "^2.3",
+        "phpunit/phpunit": "^9.1",
+        "ssnepenthe/recipe-scraper": "^0.4.3",
         "fabpot/goutte": "^4.0",
-        "phpunit/phpunit": "^9.1"
-    }
+        "vipnytt/sitemapparser": "^1.1"
+    },
+    "autoload": {
+        "psr-4": { "Megroplan\\Crawler\\": "src/" }
+      }
 }
