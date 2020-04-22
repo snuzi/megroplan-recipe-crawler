@@ -2,52 +2,53 @@
 require 'vendor/autoload.php';
 
 use Megroplan\Crawler\RecipeScraper;
+use Megroplan\Crawler\SmartScraper;
 use Megroplan\Crawler\SitemapParser;
 use Megroplan\Crawler\MeiliSearch;
 use Megroplan\Crawler\Store;
+use Megroplan\Crawler\StoreUrl;
+use Megroplan\Crawler\Exceptions\NotSupportedException;
 
-$scraper = new RecipeScraper();
 
-$db = __DIR__ . '/storage/recipesDB';
-$store = new Store($db);
+runCrawler();
 
-$meiliSearch = new MeiliSearch('recipes');
-//$meiliSearch->createIndex('recipes');
+function runCrawler($limit = 500) {
+    $scraper = new RecipeScraper();
+    $smartScraper = new SmartScraper();
 
-$sitemapUrls = SitemapParser::getUrls('https://www.jamieoliver.com/recipes.xml');
+    $db = __DIR__ . '/storage/recipesDB';
+    $store = new Store($db, 'recipes');
+    $urlStore = new StoreUrl($db, 'urls');
 
-$index = 1621;
-$total = count($sitemapUrls) - 1;
-$sitemapUrls = array_slice($sitemapUrls, $index, $total);
+    $index = 1;
+    $urls = $urlStore->getUrls($limit);
+    foreach ($urls as $url) {
+        try {
+            echo $index . " - _id: " . $url['_id'] . "  Crawling: " . $url['url'] . "\n";
 
-//exit;
-
-foreach ($sitemapUrls as $url => $tags) {
-    echo $index . " - Crawling: " . $url . "\n";
+            $recipe = $scraper->getRecipe($url['url']);
     
-    $recipe = $scraper->getRecipe($url);
-    $recipe['id'] = $index;
-  
-    $store->saveRecipe($recipe);
+            $smartIngredients = $smartScraper->parseIngredients($recipe['ingredients']);
+            $recipe['ingredientList'] = $smartIngredients;
+            $recipe['ingredients'] = $smartScraper->toIngredientNaneList($smartIngredients);
 
-    //$meiliSearch->add([$recipe]);
+            $store->saveRecipe($recipe);
 
-    if ($index % rand(5,20) == 0) {
-        sleep(rand(2,20));
+            //$meiliSearch->add([$recipe]);
+
+            $rand = rand(5,20);
+            if ($index % $rand == 0) {
+                echo "\n sleep " . $rand . "  \n";
+                sleep(rand(1,3));
+            }
+            if ($index % 25 == 0) {
+                echo "\n sleep 2 \n";
+                sleep(5);
+            }
+        } catch(NotSupportedException $e) {
+            echo "\n" .$e->getMessage() . "\n";
+        }
+        $urlStore->saveUrl($url);
+        $index++;
     }
-    $index++;
 }
-
-$url = 'https://www.jamieoliver.com/recipes/sauce-recipes/bolognese-sauce';
-
-//$recipe = $scraper->getRecipe($url);
-
-//$tntSearch->createIndex();
-
-//$recipe['id'] = $recipe['url'];
-
-//$recipe = ['id' => 'https://test.com', 'notes' => 'bla blabla'];
-//$tntSearch->insert($recipe);
-//$res = $tntSearch->search('bla ');
-//var_dump($res);
-//var_dump($recipe['image']);

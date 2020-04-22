@@ -7,10 +7,12 @@ use SleekDB\SleekDB;
 class Store
 {
     private $store;
+    private $storeName;
 
-    public function __construct($database)
+    public function __construct($databaseDir, $storeName)
     {
-        $this->database = $database;
+        $this->databaseDir = $databaseDir;
+        $this->storeName = $storeName;
         $this->init();
     }
 
@@ -21,12 +23,12 @@ class Store
 
     protected function storeName(): string
     {
-        return 'recipes';
+        return $this->storeName;
     }
 
     protected function databaseDir(): string
     {
-        return $this->database;
+        return $this->databaseDir;
     }
 
     public function getStore()
@@ -34,9 +36,9 @@ class Store
         return $this->store;
     }
 
-    public static function store(string $database)
+    public static function store(string $databaseDir)
     {
-        $store = new Store($database);
+        $store = new Store($databaseDir);
 
         return $store->getStore();
     }

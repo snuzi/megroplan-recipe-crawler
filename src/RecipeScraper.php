@@ -2,6 +2,7 @@
 namespace Megroplan\Crawler;
 
 use Goutte\Client;
+use Megroplan\Crawler\Exceptions\NotSupportedException;
 
 class RecipeScraper {
     private $client;
@@ -31,7 +32,7 @@ class RecipeScraper {
         $crawler = $this->getClient()->request('GET', $url);
 
         if (!$this->getScraper()->supports($crawler)) {
-            throw new \Exception('"{$url} not currently supported!"');
+            throw new NotSupportedException("{$url} not currently supported!");
         }
         
         return $this->getScraper()->scrape($crawler);
