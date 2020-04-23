@@ -11,16 +11,16 @@ use Megroplan\Crawler\Exceptions\NotSupportedException;
 use Megroplan\Crawler\TypeSense;
 use Devloops\Typesence\Exceptions\RequestMalformed;
 
-search();
-exit;
+//search();
+//exit;
 
-$typeSense = new TypeSense('recipes.dev');
+//$typeSense = new TypeSense('recipes.dev');
 //$typeSense->deleteIndex();
 //$typeSense->createIndex();
 
 //var_dump($typeSense->getIndex());
 
-index(500);
+index(3000);
 
 function removeNulls($item) {
     return $item === null ? '' : $item;

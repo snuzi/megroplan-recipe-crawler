@@ -131,14 +131,28 @@ class TypeSense {
 
     public function add(array $document)
     {
+        if($this->getDocument($document['id'])) {
+            $this->delete($document['id']);
+        }
+
         $this->getClient()->collections[$this->indexName]
             ->documents->create($document);
     }
 
     public function delete($documentsId)
     {
-        $this->getClient()->collection($this->indexName)
+        $this->getClient()->collections[$this->indexName]
             ->documents[$documentsId]->delete();
+    }
+
+    public function getDocument($documentsId)
+    {
+        try {
+            return $this->getClient()->collections[$this->indexName]
+                ->documents[$documentsId]->retrieve();
+        } catch (\Devloops\Typesence\Exceptions\ObjectNotFound $e) {
+            return null;
+        }
     }
 
     public function deleteIndex()
