@@ -44,7 +44,7 @@ class SmartScraper {
     /**
      * return string[] list of ingredient names
      */
-    public function toIngredientNaneList($smartIngredients)
+    public function toIngredientNameList($smartIngredients)
     {
         $ingredients = [];
         foreach ($smartIngredients['ingredients'] as $ing) {

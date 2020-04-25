@@ -1,9 +1,9 @@
 {
     "require": {
         "phpunit/phpunit": "^9.1",
-        "ssnepenthe/recipe-scraper": "^0.4.3",
         "fabpot/goutte": "^4.0",
         "vipnytt/sitemapparser": "^1.1",
+        "ssnepenthe/recipe-scraper": "dev-improve-scraper",
         "rakibtg/sleekdb": "^1.5",
         "meilisearch/meilisearch-php": "^0.9.0",
         "guzzlehttp/guzzle": "^6.5",
@@ -11,5 +11,11 @@
     },
     "autoload": {
         "psr-4": { "Megroplan\\Crawler\\": "src/" }
-      }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "https://github.com/snuzi/recipe-scraper.git"
+        }
+    ]
 }

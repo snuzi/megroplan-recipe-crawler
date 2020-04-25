@@ -61,15 +61,15 @@ class TypeSense {
             ],
             [
                 'name' => 'prepTime',
-                'type' => 'string',
+                'type' => 'int32',
             ],
             [
                 'name' => 'totalTime',
-                'type' => 'string',
+                'type' => 'int32',
             ],
             [
                 'name' => 'cookTime',
-                'type' => 'string',
+                'type' => 'int32',
             ],
             [
                 'name' => 'publisher',
