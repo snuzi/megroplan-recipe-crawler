@@ -101,7 +101,7 @@ class TypeSense {
             return $this->client;
         }
 
-        $this->client =  $client = new Client(
+        $this->client = new Client(
             [
               'master_node' => [
                 'host' => $this->host,

@@ -34,6 +34,11 @@ function runCrawler($limit = 500) {
             $recipe['prepTime'] = Utils::ISO8601FormatToMinutes($recipe['prepTime']);
             $recipe['totalTime'] = Utils::ISO8601FormatToMinutes($recipe['totalTime']);
             $recipe['cookTime'] = Utils::ISO8601FormatToMinutes($recipe['cookTime']);
+
+            foreach($recipe['nutrition'] as $key => $value) {
+                $recipe['nutrition'][$key] = Utils::getFloatFromString($value)[0];
+            }
+
             $store->saveRecipe($recipe);
 
             $rand = rand(5,20);
