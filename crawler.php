@@ -36,7 +36,7 @@ function runCrawler($limit = 500) {
             $recipe['cookTime'] = Utils::ISO8601FormatToMinutes($recipe['cookTime']);
 
             foreach($recipe['nutrition'] as $key => $value) {
-                $recipe['nutrition'][$key] = Utils::getFloatFromString($value)[0];
+                $recipe['nutrition'][$key] = Utils::getFloatFromString($value);
             }
 
             $store->saveRecipe($recipe);

@@ -17,7 +17,7 @@ class Utils {
     {
         preg_match_all('!\d+(?:\.\d+)?!', $str, $matches);
         $floats = array_map('floatval', $matches[0]);
-        
+
         return $floats ? $floats[0] : null;
     }
 }
