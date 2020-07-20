@@ -8,14 +8,26 @@ use Megroplan\Crawler\MeiliSearch;
 use Megroplan\Crawler\Store;
 use Megroplan\Crawler\StoreUrl;
 use Megroplan\Crawler\Exceptions\NotSupportedException;
-use Megroplan\Crawler\TypeSense;
-use Devloops\Typesence\Exceptions\RequestMalformed;
+use Megroplan\Crawler\MeiliSearch;
 
-search();
+$a = json_decode(file_get_contents('https://api.nal.usda.gov/fdc/v1/food/784988?api_key=J4oSYXd49Vo2SODvStixuzyRwaKJmAiSQXPQJJH6'), true);
 
-$typeSense = new TypeSense('recipes.dev');
-//$typeSense->deleteIndex();
-//$typeSense->createIndex();
+
+foreach($a['inputFoods'] as $ing) {
+    $portion = explode(',', $ing['portionDescription'])[0];
+    $portionArr = explode(' ', $portion);
+    $amount = $portionArr[0] * $ing['amount'];
+    $measure = $portionArr[1];
+    $ingName = explode(',', $ing['ingredientDescription'])[0];
+    echo $amount . " " . $measure . " " .  $ingName . "\n";
+}
+exit;
+
+//search();
+
+$meiliSearch = new MeiliSearch('recipes.dev');
+//$meiliSearch->deleteIndex();
+$meiliSearch->createIndex();
 
 //var_dump($typeSense->getIndex());
 
@@ -27,7 +39,7 @@ function removeNulls($item) {
 
 function index($limit = 500) {
 
-        $typeSense = new TypeSense('recipes.dev');
+        $meiliSearch = new MeiliSearch('recipes.dev');
 
         $db = __DIR__ . '/storage/recipesDB';
         $store = new Store($db, 'recipes');
@@ -39,7 +51,7 @@ function index($limit = 500) {
                 echo $index . " - _id: " . $recipe['_id'] . "  Indexing: " . $recipe['url'] . "\n";
                 $recipe = array_map('removeNulls', $recipe);
 
-                $recipe['cuisines'] = $recipe['cuisines'] == '' ? [] : $recipe['cuisines'];
+                $recipe['cuisines'] = $recipe['cuisines'] == '' ? [] : array_values($recipe['cuisines']);
                 $recipe['categories'] = $recipe['categories'] == '' ? [] : $recipe['categories'];
                 $recipe['ingredients'] = !$recipe['ingredients'] ? [] : $recipe['ingredients'];
 
@@ -48,12 +60,13 @@ function index($limit = 500) {
                 $recipe['totalTime'] = $recipe['totalTime'] ? $recipe['totalTime'] : 0;
                 $recipe['notes'] = $recipe['notes'] ? implode(' ', $recipe['notes']) : '';
                 $recipe['id'] = '' . $recipe['_id'];
-                $typeSense->add($recipe);
+
+                $meiliSearch->add([$recipe]);
 
                 if ($index % 50 == 0) {
                     sleep(1);
                 }
-            } catch (RequestMalformed $e) {
+            } catch (\Exception $e) {
                 echo $e->getMessage();
                 var_dump($recipe['categories'] );
                 
@@ -69,13 +82,13 @@ function search() {
         'query_by'  => 'name,description,notes,ingredients,instructions',
         'facet_by' => 'cuisines,categories',
         'include_fields' => 'name,id,_id,url',
-        'page' => 1,
+        'page' => 50,
         'per_page' => 10
     ];
 
-    $typeSense = new TypeSense('recipes.dev');
+    $meiliSearch = new MeiliSearch('recipes.dev');
     //var_dump($typeSense->getIndex()); exit;
-    $result = $typeSense->search($params);
+    $result = $meiliSearch->search($params);
 
     foreach($result['hits'] as $doc) {
         $result ['ids'][] = intval($doc['document']['id']);

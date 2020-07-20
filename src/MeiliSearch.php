@@ -6,10 +6,12 @@ use MeiliSearch\Client;
 class MeiliSearch {
     private const INDEX_NAME = 'megroplan.index';
     private $client;
+    
+    private static $instance = null;
 
     private $host = 'http://localhost:7700';
     private $masterKey = 'masterKey';
-    private $indexName = 'masterKey';
+    private $indexName = 'indexName';
 
     public function __construct($index) {
         $this->indexName = $index;
@@ -32,9 +34,9 @@ class MeiliSearch {
         return $this->getClient()->getIndex($this->indexName);
     }
 
-    public function createIndex($indexName = self::INDEX_NAME, $primaryKey = 'id') {
+    public function createIndex($primaryKey = 'id') {
         $indexer = $this->getClient()->createIndex([
-                'uid' => $indexName,
+                'uid' => $this->indexName,
                 'primaryKey' => $primaryKey
             ]);
 
