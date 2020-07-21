@@ -8,25 +8,12 @@ use Megroplan\Crawler\MeiliSearch;
 use Megroplan\Crawler\Store;
 use Megroplan\Crawler\StoreUrl;
 use Megroplan\Crawler\Exceptions\NotSupportedException;
-use Megroplan\Crawler\MeiliSearch;
-
-$a = json_decode(file_get_contents('https://api.nal.usda.gov/fdc/v1/food/784988?api_key=J4oSYXd49Vo2SODvStixuzyRwaKJmAiSQXPQJJH6'), true);
 
 
-foreach($a['inputFoods'] as $ing) {
-    $portion = explode(',', $ing['portionDescription'])[0];
-    $portionArr = explode(' ', $portion);
-    $amount = $portionArr[0] * $ing['amount'];
-    $measure = $portionArr[1];
-    $ingName = explode(',', $ing['ingredientDescription'])[0];
-    echo $amount . " " . $measure . " " .  $ingName . "\n";
-}
-exit;
+search();
 
-//search();
-
-$meiliSearch = new MeiliSearch('recipes.dev');
-//$meiliSearch->deleteIndex();
+$meiliSearch = new MeiliSearch('recipesdev');
+$meiliSearch->deleteIndex();
 $meiliSearch->createIndex();
 
 //var_dump($typeSense->getIndex());
@@ -39,7 +26,7 @@ function removeNulls($item) {
 
 function index($limit = 500) {
 
-        $meiliSearch = new MeiliSearch('recipes.dev');
+        $meiliSearch = new MeiliSearch('recipesdev');
 
         $db = __DIR__ . '/storage/recipesDB';
         $store = new Store($db, 'recipes');
@@ -68,7 +55,7 @@ function index($limit = 500) {
                 }
             } catch (\Exception $e) {
                 echo $e->getMessage();
-                var_dump($recipe['categories'] );
+               // var_dump($recipe['categories'] );
                 
             }
 
@@ -78,23 +65,18 @@ function index($limit = 500) {
 
 function search() {
     $params = [
-        'q' => 'olive',
-        'query_by'  => 'name,description,notes,ingredients,instructions',
-        'facet_by' => 'cuisines,categories',
-        'include_fields' => 'name,id,_id,url',
-        'page' => 50,
-        'per_page' => 10
+        'q' => 'olive'
     ];
 
-    $meiliSearch = new MeiliSearch('recipes.dev');
+    $meiliSearch = new MeiliSearch('recipesdev');
     //var_dump($typeSense->getIndex()); exit;
-    $result = $meiliSearch->search($params);
+    $result = $meiliSearch->search('olive', $params);
 
     foreach($result['hits'] as $doc) {
-        $result ['ids'][] = intval($doc['document']['id']);
+        $result['ids'][] = intval($doc['id']);
     }
 
-    $result['total_pages'] = ceil($result['found'] / $params['per_page']);
+    //$result['total_pages'] = ceil($result['found'] / $params['per_page']);
     unset($result['hits']);
     
     var_dump($result);

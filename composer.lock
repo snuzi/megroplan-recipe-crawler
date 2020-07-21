@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "546e489f77f735b91af52b597a61732e",
+    "content-hash": "6cd16c8439e6e2f4c0b710b913a21e9c",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -61,45 +61,6 @@
                 "utils"
             ],
             "time": "2017-06-12T01:10:27+00:00"
-        },
-        {
-            "name": "devloopsnet/typesens-php",
-            "version": "v1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/devloopsnet/typesense-php.git",
-                "reference": "99b68d10e1cce7ad01e72dd390828367a57aace6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/devloopsnet/typesense-php/zipball/99b68d10e1cce7ad01e72dd390828367a57aace6",
-                "reference": "99b68d10e1cce7ad01e72dd390828367a57aace6",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Devloops\\Typesence\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Abdullah Al-Faqeir",
-                    "email": "abdullah@devloops.net",
-                    "homepage": "https://www.devloops.net",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP client for Typesense https://github.com/typesense/typesense",
-            "homepage": "https://www.devloops.net",
-            "time": "2020-04-07T13:58:50+00:00"
         },
         {
             "name": "doctrine/instantiator",

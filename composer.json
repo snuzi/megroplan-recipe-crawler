@@ -6,8 +6,7 @@
         "ssnepenthe/recipe-scraper": "dev-improve-scraper",
         "rakibtg/sleekdb": "^1.5",
         "meilisearch/meilisearch-php": "^0.9.0",
-        "guzzlehttp/guzzle": "^6.5",
-        "devloopsnet/typesens-php": "1.0.5"
+        "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {
         "psr-4": { "Megroplan\\Crawler\\": "src/" }
